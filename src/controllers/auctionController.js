@@ -4,6 +4,7 @@ const searchItems = async (req, res) => {
   const { query } = req.query;
 
   try {
+    // Use the AuctionItem model to search the database for items where either the title or description matches the 'query' string. The '$regex' operator is used for pattern matching, and '$options: "i"' makes the search case-insensitive.
     const items = await AuctionItem.find({
       $or: [
         { title: { $regex: query, $options: "i" } },
@@ -17,27 +18,5 @@ const searchItems = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-// const { getAIPredictions } = require("../services/aiService");
-
-// const searchItems = async (req, res) => {
-//   const { query } = req.query;
-
-//   try {
-//     const aiResponse = await getAIPredictions(query);
-//     const aiKeywords = aiResponse.keywords;
-
-//     const items = await AuctionItem.find({
-//       $or: [
-//         { title: { $regex: aiKeywords.join("|"), $options: "i" } },
-//         { description: { $regex: aiKeywords.join("|"), $options: "i" } },
-//       ],
-//     });
-
-//     res.json(items);
-//   } catch (error) {
-//     console.error("Error searching items", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
 
 module.exports = { searchItems };
